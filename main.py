@@ -13,40 +13,40 @@ from alibabacloud_cdn20180510 import models as cdn_models
 
 today = datetime.date.today().strftime("%Y.%m.%d")
 
-# config = open_api_models.Config()
-# config.access_key_id = os.getenv('ACCESS_KEY_ID')
-# config.access_key_secret = os.getenv('ACCESS_KEY_SECRET')
-# config.endpoint = 'cas.aliyuncs.com'
-# casClient = CasClient(config)
-# request = cas_models.UploadUserCertificateRequest()
-# request.name = today
-# fullchain = open('fullchain.pem').read()
-# request.cert = fullchain
-# key = open('privkey.pem').read()
-# request.key = key
-# response = casClient.upload_user_certificate(request)
-# print(UtilClient.to_jsonstring(TeaCore.to_map(response.body)))
-#
-#
-# config = open_api_models.Config()
-# config.access_key_id = os.getenv('ACCESS_KEY_ID')
-# config.access_key_secret = os.getenv('ACCESS_KEY_SECRET')
-# config.region_id = "cn-hangzhou"
-# dcdnClient = DcdnClient(config)
-# request = dcdn_models.BatchSetDcdnDomainCertificateRequest()
-# request.cert_name = today
-# request.cert_type = "cas"
-# domains = open("dcdn_domains.txt").read().split("\n")
-# if "" in domains: domains.remove("")
-# request.domain_name = ",".join(domains)
-# request.sslprotocol = "on"
-# try:
-#     response = dcdnClient.batch_set_dcdn_domain_certificate(request)
-#     print('-------批量设置DCDN证书成功--------')
-#     print(UtilClient.to_jsonstring(TeaCore.to_map(response.body)))
-# except Exception as error:
-#     print('-------批量设置CDN证书失败--------')
-#     print(error.message)
+config = open_api_models.Config()
+config.access_key_id = os.getenv('ACCESS_KEY_ID')
+config.access_key_secret = os.getenv('ACCESS_KEY_SECRET')
+config.endpoint = 'cas.aliyuncs.com'
+casClient = CasClient(config)
+request = cas_models.UploadUserCertificateRequest()
+request.name = today
+fullchain = open('fullchain.pem').read()
+request.cert = fullchain
+key = open('privkey.pem').read()
+request.key = key
+response = casClient.upload_user_certificate(request)
+print(UtilClient.to_jsonstring(TeaCore.to_map(response.body)))
+
+
+config = open_api_models.Config()
+config.access_key_id = os.getenv('ACCESS_KEY_ID')
+config.access_key_secret = os.getenv('ACCESS_KEY_SECRET')
+config.region_id = "cn-hangzhou"
+dcdnClient = DcdnClient(config)
+request = dcdn_models.BatchSetDcdnDomainCertificateRequest()
+request.cert_name = today
+request.cert_type = "cas"
+domains = open("dcdn_domains.txt").read().split("\n")
+if "" in domains: domains.remove("")
+request.domain_name = ",".join(domains)
+request.sslprotocol = "on"
+try:
+    response = dcdnClient.batch_set_dcdn_domain_certificate(request)
+    print('-------批量设置DCDN证书成功--------')
+    print(UtilClient.to_jsonstring(TeaCore.to_map(response.body)))
+except Exception as error:
+    print('-------批量设置CDN证书失败--------')
+    print(error.message)
 
 
 config = open_api_models.Config()
