@@ -15,15 +15,15 @@ config.access_key_id = os.getenv('ACCESS_KEY_ID')
 config.access_key_secret = os.getenv('ACCESS_KEY_SECRET')
 config.endpoint = 'cas.aliyuncs.com'
 today = datetime.date.today().strftime("%Y.%m.%d")
-# casClient = CasClient(config)
-# request = cas_models.UploadUserCertificateRequest()
-# request.name = today
-# fullchain = open('fullchain.pem').read()
-# request.cert = fullchain
-# key = open('privkey.pem').read()
-# request.key = key
-# response = casClient.upload_user_certificate(request)
-# print(UtilClient.to_jsonstring(TeaCore.to_map(response.body)))
+casClient = CasClient(config)
+request = cas_models.UploadUserCertificateRequest()
+request.name = today
+fullchain = open('fullchain.pem').read()
+request.cert = fullchain
+key = open('privkey.pem').read()
+request.key = key
+response = casClient.upload_user_certificate(request)
+print(UtilClient.to_jsonstring(TeaCore.to_map(response.body)))
 
 
 config = open_api_models.Config()
