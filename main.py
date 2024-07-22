@@ -45,7 +45,7 @@ try:
     print('-------批量设置DCDN证书成功--------')
     print(UtilClient.to_jsonstring(TeaCore.to_map(response.body)))
 except Exception as error:
-    print('-------批量设置CDN证书失败--------')
+    print('-------批量设置DCDN证书失败--------')
     print(error.message)
 
 
