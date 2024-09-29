@@ -22,7 +22,7 @@ request = cas_models.UploadUserCertificateRequest()
 request.name = today
 fullchain = open('fullchain.pem').read()
 request.cert = fullchain
-key = open('privkey.pem').read()
+key = open('private.pem').read()
 request.key = key
 response = casClient.upload_user_certificate(request)
 print(UtilClient.to_jsonstring(TeaCore.to_map(response.body)))
