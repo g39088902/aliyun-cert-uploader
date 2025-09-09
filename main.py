@@ -46,7 +46,7 @@ try:
     print(UtilClient.to_jsonstring(TeaCore.to_map(response.body)))
 except Exception as error:
     print('-------批量设置DCDN证书失败--------')
-    print(error.message)
+    print(error)
 
 
 config = open_api_models.Config()
