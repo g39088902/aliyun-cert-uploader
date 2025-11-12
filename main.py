@@ -36,17 +36,28 @@ dcdnClient = DcdnClient(config)
 request = dcdn_models.BatchSetDcdnDomainCertificateRequest()
 request.cert_name = today
 request.cert_type = "cas"
-domains = open("dcdn_domains.txt").read().split("\n")
-if "" in domains: domains.remove("")
-request.domain_name = ",".join(domains)
-request.sslprotocol = "on"
-try:
-    response = dcdnClient.batch_set_dcdn_domain_certificate(request)
-    print('-------批量设置DCDN证书成功--------')
-    print(UtilClient.to_jsonstring(TeaCore.to_map(response.body)))
-except Exception as error:
-    print('-------批量设置DCDN证书失败--------')
-    print(error)
+with open("dcdn_domains.txt", "r", encoding="utf-8") as f:
+    domains = [d.strip() for d in f.read().splitlines() if d.strip()]
+
+BATCH_SIZE = 5
+total = len(domains)
+print(f"共 {total} 个域名，按每批 {BATCH_SIZE} 个发送。")
+
+for start in range(0, total, BATCH_SIZE):
+    chunk = domains[start:start + BATCH_SIZE]
+    # 设置请求参数（根据你的 SDK/Request 类型调整字段名）
+    request.domain_name = ",".join(chunk)
+    request.sslprotocol = "on"
+
+    try:
+        response = dcdnClient.batch_set_dcdn_domain_certificate(request)
+        print(f"[成功] DCDN批次 {start//BATCH_SIZE + 1}：{chunk}")
+        print(UtilClient.to_jsonstring(TeaCore.to_map(response.body)))
+    except Exception as error:
+        print(f"[失败] DCDN批次 {start//BATCH_SIZE + 1}：{chunk}")
+        print(error)
+
+print("所有DCDN批次发送完成。")
 
 
 config = open_api_models.Config()
