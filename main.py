@@ -65,16 +65,26 @@ config.access_key_id = os.getenv('ACCESS_KEY_ID')
 config.access_key_secret = os.getenv('ACCESS_KEY_SECRET')
 cdnClient = CdnClient(config)
 request = cdn_models.BatchSetCdnDomainServerCertificateRequest()
-domains = open("cdn_domains.txt").read().split("\n")
-if "" in domains: domains.remove("")
-request.domain_name = ",".join(domains)
-request.sslprotocol = "on"
 request.cert_name = today
 request.cert_type = "cas"
-try:
-    response = cdnClient.batch_set_cdn_domain_server_certificate(request)
-    print('-------批量设置CDN证书成功--------')
-    print(UtilClient.to_jsonstring(TeaCore.to_map(response.body)))
-except Exception as error:
-    print('-------批量设置CDN证书失败--------')
-    print(error.message)
+with open("cdn_domains.txt", "r", encoding="utf-8") as f:
+    domains = [d.strip() for d in f.read().splitlines() if d.strip()]
+
+BATCH_SIZE = 5
+total = len(domains)
+print(f"共 {total} 个CDN域名，按每批 {BATCH_SIZE} 个发送。")
+
+for start in range(0, total, BATCH_SIZE):
+    chunk = domains[start:start + BATCH_SIZE]
+    request.domain_name = ",".join(chunk)
+    request.sslprotocol = "on"
+
+    try:
+        response = cdnClient.batch_set_cdn_domain_server_certificate(request)
+        print(f"[成功] CDN批次 {start//BATCH_SIZE + 1}：{chunk}")
+        print(UtilClient.to_jsonstring(TeaCore.to_map(response.body)))
+    except Exception as error:
+        print(f"[失败] CDN批次 {start//BATCH_SIZE + 1}：{chunk}")
+        print(error)
+
+print("所有CDN批次发送完成。")
